@@ -17,9 +17,29 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const addTask = (e) => {
     e.preventDefault();
+    setInputVal("");
     setTasks([
       ...tasks,
-      {id:"task"+tasks.length,title:inputVal}]);
+      {id:"task"+tasks.length,title:inputVal,status:"pending"}
+    ]);
+  }
+
+  const deleteTask = (i) => {
+    //current contains latest state array
+    setTasks((current) =>
+      current.filter(el => el.id !== i)
+    );
+  }
+  const taskDone = (i) => {
+    setTasks((current) => {
+      return current.map(obj => {
+        if (obj.id === i) {
+          // Create a new object with the updated status
+          return { ...obj, status: "done" };
+        }
+        return obj; //return unchanged objects
+      });
+    });
   }
 
   return (
@@ -44,7 +64,7 @@ function App() {
         {tasks.length>0 &&
           tasks.map((el)=>{
             return(
-              <Task key={el.id} data={el} />
+              <Task key={el.id} data={el} handleDelete={(id)=>deleteTask(id)} handleDone={(id)=>taskDone(id)} />
             )
           })
         }
