@@ -55,7 +55,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 className='bold text-primary'>A React JS To-Do-List App</h1>
+        <h1 className='bold text-primary'>A React JS <span className='nowrap'>To-Do-List</span> App</h1>
       </header>
 
       <div className='wrapper'>
