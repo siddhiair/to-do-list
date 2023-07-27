@@ -1,10 +1,10 @@
 import './App.css';
 import Task from './components/task/Task';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 const InputField = ({val,handleChange}) => {
   return(
-    <input type="text" className="form-control" id="task-input" value={val} onChange={handleChange} />
+    <input type="text" className="form-control" id="task-input" value={val} onChange={handleChange} placeholder='Add new task' />
   );
 }
 
@@ -14,7 +14,17 @@ function App() {
 		setInputVal(e.target.value)
 	}
 
-  const [tasks, setTasks] = useState([]);
+  //check and get existing to do task data from localstorage
+  let todo_data = null;
+  if(localStorage.getItem("todo_data") !== null){
+    todo_data = JSON.parse(localStorage.getItem("todo_data"));
+  }
+  const [tasks, setTasks] = useState(todo_data ? todo_data : []);
+
+  useEffect(() => {
+    localStorage.setItem('todo_data', JSON.stringify(tasks));
+  }, [tasks]);
+
   const addTask = (e) => {
     e.preventDefault();
     setInputVal("");
@@ -45,12 +55,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>A React JS To-Do-List App</h1>
+        <h1 className='bold text-primary'>A React JS To-Do-List App</h1>
       </header>
 
       <div className='wrapper'>
         <div className="form-wrap">
-          <h4>Add new task</h4>
           <form className="w-full" onSubmit={(e)=>addTask(e)}>
             <div className="flex">
               <div className="form-group grow">
@@ -60,18 +69,25 @@ function App() {
             </div>
           </form>
         </div>
-
-        {tasks.length>0 &&
-          tasks.map((el)=>{
-            return(
-              <Task key={el.id} data={el} handleDelete={(id)=>deleteTask(id)} handleDone={(id)=>taskDone(id)} />
-            )
-          })
-        }
-        {tasks.length===0 &&
-          <div className='text-center no-task-msg'>No task added</div>
-        }
       </div>
+
+      {tasks.length>0 &&
+        <div className='tasks-wrapper'>
+          <h3 className='medium tasks-header'>Task list:</h3>
+          <div className='tasks-body'>
+          {
+            tasks.map((el)=>{
+              return(
+                <Task key={el.id} data={el} handleDelete={(id)=>deleteTask(id)} handleDone={(id)=>taskDone(id)} /> 
+              )
+            })
+          }
+          </div>
+        </div>
+      }
+      {tasks.length===0 &&
+        <div className='text-center no-task-msg'>No task added</div>
+      }
     </div>
   );
 }

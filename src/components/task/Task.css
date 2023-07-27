@@ -1,13 +1,33 @@
 .task-item{
-	background: #f5f5f5;
-	padding: 8px 15px;
-	margin-top: 15px;
+	padding: 8px 0;
 	text-align: left;
 	position: relative;
 	overflow: hidden;
+	column-gap: 15px;
 }
-.task-item.done{
-	background: #2deb8a;
+.task-item p{
+	position: relative;
+	transition: color .3s;
+}
+.task-item p::before{
+	content: '';
+	position: absolute;
+	left: 0;
+	top:50%;
+	transform: translateY(-50%);
+	width: 0;
+	height: 1px;
+	background: currentColor;
+	transition: width .3s;
+}
+.task-item:not(:last-child){
+	border-bottom: 1px solid #eee;
+}
+.task-item.done p{
+	color: #777;
+}
+.task-item.done p::before{
+	width: 100%;
 }
 .task-item>*{
 	transition: all .3s;
@@ -16,30 +36,38 @@
 	font-size: 1.1rem;
 }
 .btn-group{
-	column-gap: 8px;
-	padding: 8px;
-	background: #f5f5f5;
-	position: absolute;
-	right:0;
-	top:0;
-	bottom: 0;
+	column-gap: 15px;
 	align-items: center;
-	transform: translateX(100%);
 }
 .btn{
-	padding: 5px 12px;
-	font-size: .9rem;
-	display: inline-block;
+	padding: 5px;
+	display: inline-flex;
 	color: #fff;
 	cursor: pointer;
+	align-items: center;
+	justify-content: center;
 	border:none;
+	width: 2.4rem;
+	height: 2.4rem;
+	border-radius: 50%;
+	transition: all .3s;
+}
+.btn span{
+	max-width: 0;
+	display: block;
+	transition: width .3s;
+	overflow: hidden;
 }
 .btn-done{
-	background: #429d42;
+	background: #63dd79;
 }
 .btn-delete{
-	background: #e33939;
+	background: #fd7979;
 }
-.task-item:hover .btn-group{
-	transform: translateX(0);
+.btn:hover{
+	border-radius: 25px;
+	width: 100px
+}
+.btn:hover span{
+	max-width: 50px;
 }
